@@ -1,121 +1,187 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useSettings } from '../context/SettingsContext';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { treks } from '../data/treks';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const images = [
-  "https://images.unsplash.com/photo-1671181366687-47530c4dbe4b?q=80&w=1470&auto=format&fit=crop", // ABC
-  "https://images.unsplash.com/photo-1713670959170-176c7d31b93f?q=80&w=1074&auto=format&fit=crop", // Gosaikunda
-  "https://images.unsplash.com/photo-1643548947288-fbf86caf414a?q=80&w=1102&auto=format&fit=crop", // Langtang
-  "https://images.unsplash.com/photo-1505058439590-d86bd136dcec?q=80&w=1470&auto=format&fit=crop", // Gokyo
-  "https://plus.unsplash.com/premium_photo-1697729963745-8e14a76d48c2?q=80&w=1121&auto=format&fit=crop", // EBC
-];
+const word1 = "PROJECT";
+const word2 = "PEAK";
 
-const Hero = () => {
+const Hero = ({ ready = true }) => {
   const { t } = useSettings();
-  const [currentIndex, setCurrentIndex] = useState(0);
   const heroRef = useRef(null);
-  const imageRef = useRef(null);
-  const textRef = useRef(null);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % images.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, []);
+  const titleRef = useRef(null);
+  const miniImages = treks.slice(0, 6).map(trek => trek.image);
 
   useEffect(() => {
     let ctx = gsap.context(() => {
-      // Subtle image pop-in on load — scale from 1.05 to 1, then stays static
-      gsap.fromTo(imageRef.current,
-        { scale: 1.08, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 2, ease: 'power2.out' }
-      );
+      if (!titleRef.current) return;
+      const letters = titleRef.current.querySelectorAll('.hero-letter');
+      const frames = heroRef.current.querySelectorAll('.mini-frame, .mobile-frame');
+      const taglineBtn = heroRef.current.querySelectorAll('.hero-tagline, .hero-btn');
+      
+      // Set initial hidden states immediately to prevent FOUC while preloader is active
+      gsap.set(letters, { scale: 0.8, opacity: 0 });
+      gsap.set(frames, { scale: 0, opacity: 0 });
+      gsap.set(taglineBtn, { y: 30, opacity: 0 });
 
-      // Text stagger fade in
-      gsap.fromTo(
-        textRef.current.children,
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1.2, stagger: 0.15, ease: 'power3.out', delay: 0.3 }
-      );
+      // Only play animations if the preloader is finished (ready is true)
+      if (!ready) return;
 
-      // Parallax on scroll — image slowly shifts up as user scrolls away
-      ScrollTrigger.create({
-        trigger: heroRef.current,
-        start: 'top top',
-        end: 'bottom top',
-        scrub: true,
-        animation: gsap.to(imageRef.current, {
-          y: '-10%',
-          ease: 'none'
-        })
+      // --- 1. Master Opening Animation Timeline ---
+      const tl = gsap.timeline();
+      
+      // Letters fade and scale in
+      tl.to(letters, {
+        scale: 1,
+        opacity: 1,
+        duration: 1.2,
+        stagger: 0.04,
+        ease: 'expo.out',
+      }, 0);
+
+      // Elastic pop-in for frames - starting bit earlier
+      tl.to(frames, {
+        scale: 1,
+        opacity: 1,
+        duration: 1.2,
+        stagger: 0.06,
+        ease: 'elastic.out(1, 0.7)',
+      }, 0.05);
+
+      // Fade in tagline and button smoothly
+      tl.to(taglineBtn, {
+        y: 0,
+        opacity: 1,
+        duration: 1.2,
+        stagger: 0.15,
+        ease: 'power3.out',
+      }, 0.15);
+
+      // --- 2. Scroll-Triggered Parallax ---
+      // Move frames at completely different speeds on scroll
+      frames.forEach((frame, i) => {
+        // Some move up, some move down faster
+        const yMove = i % 2 === 0 ? gsap.utils.random(-150, -80) : gsap.utils.random(80, 150);
+        
+        gsap.to(frame, {
+          y: yMove,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1.5, // Smooth scrubbing
+          }
+        });
       });
-    }, heroRef);
 
+      // Subtle parallax for the main title text (fades as user scrolls down)
+      gsap.to(titleRef.current, {
+        y: 80,
+        scale: 0.95,
+        opacity: 0.5,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: heroRef.current,
+          start: 'top top', // Start at top of viewport so title is 100% opaque at scroll position 0
+          end: 'bottom top',
+          scrub: 1,
+        }
+      });
+      
+    }, heroRef);
     return () => ctx.revert();
-  }, []);
+  }, [ready]);
 
   return (
-    <section id="hero" ref={heroRef} className="relative w-full h-[100dvh] flex items-center justify-center overflow-hidden">
-      {/* Looping Background Gallery */}
-      <div ref={imageRef} className="absolute inset-0 z-0 overflow-hidden bg-peakDeep">
-        {images.map((src, index) => (
-          <img
-            key={src}
-            src={src}
-            alt={["Annapurna Base Camp mountain range", "Gosaikunda Holy Lakes", "Langtang Valley peaks", "Gokyo Lakes turquoise waters", "Everest Base Camp sunrise"][index] || "Himalayan mountain peak"}
-            className={`absolute inset-0 w-full h-full object-cover ease-in-out ${
-              index === currentIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
-            }`}
-            style={{ 
-              transitionProperty: 'opacity, transform', 
-              transitionDuration: '1.2s' 
-            }}
-            loading={index === 0 ? "eager" : "lazy"}
-            fetchPriority={index === 0 ? "high" : "auto"}
-          />
-        ))}
-        <div className="absolute inset-0 bg-gradient-to-t from-peakDeep via-peakDeep/50 to-peakDeep/30 z-10 pointer-events-none"></div>
-      </div>
-
-      {/* Hero Content */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 text-center flex flex-col items-center">
-        <div ref={textRef} className="flex flex-col items-center">
-          <p className="text-peakWhite/70 font-sans font-medium text-sm md:text-base tracking-[0.3em] uppercase mb-6">
-            {t('hero.tagline')}
-          </p>
-          <h1 className="text-peakWhite font-display font-bold text-[3rem] sm:text-5xl md:text-7xl lg:text-[8rem] tracking-tight leading-[1] md:leading-[0.9] mb-4 md:mb-6 drop-shadow-2xl">
-            {t('hero.title')}
-          </h1>
-          <p className="text-peakWhite/80 font-sans text-sm md:text-lg max-w-lg mx-auto tracking-wide leading-relaxed mb-8 md:mb-10 px-4 md:px-0">
-            {t('hero.desc')}
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto px-4 sm:px-0">
-            <a href="#destinations" className="magnetic-btn group bg-peakGreen hover:bg-peakGreen/90 text-white px-6 py-3.5 md:px-8 md:py-4 rounded-full font-sans uppercase tracking-widest font-bold text-sm flex items-center justify-center gap-3 hover-lift shadow-[0_10px_40px_-10px_rgba(22,101,52,0.5)] transition-all w-full sm:w-auto">
-              <span className="relative z-10">{t('hero.cta')}</span>
-              <svg className="relative z-10 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
-            </a>
-            <a href="#features" className="border border-white/30 hover:border-white/60 text-white px-6 py-3.5 md:px-8 md:py-4 rounded-full font-sans uppercase tracking-widest font-semibold text-sm flex items-center justify-center gap-3 hover-lift transition-all backdrop-blur-sm w-full sm:w-auto">
-              <span>{t('hero.secondary')}</span>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      {/* Scroll indicator - hidden on mobile, trekking-themed on desktop */}
-      <div 
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 hidden md:flex flex-col items-center gap-2 cursor-pointer group" 
-        onClick={() => document.getElementById('destinations').scrollIntoView({ behavior: 'smooth' })}
+    <section id="hero" ref={heroRef} className="min-h-[100dvh] flex flex-col justify-center items-center pt-32 md:pt-40 lg:pt-48 pb-8 px-4 sm:px-6 md:px-12 w-full text-center overflow-hidden select-none">
+      
+      {/* Massive Editorial Header Title with Masked Overflow and Mini Image Frames */}
+      <h1
+        ref={titleRef}
+        className="font-condensed font-extrabold text-[4.6rem] xs:text-[5.4rem] sm:text-[7rem] md:text-[10rem] lg:text-[13rem] xl:text-[15.5rem] tracking-tight uppercase leading-[0.85] text-darkSlate dark:text-creamBg my-2 flex flex-wrap justify-center items-center gap-x-[0.22em] relative z-10"
       >
-        <div className="flex items-center gap-2 text-white/50 group-hover:text-white transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m8 3 4 8 5-5 5 15H2L8 3z"/></svg>
-          <span className="text-[10px] font-sans font-bold uppercase tracking-[0.2em] mt-0.5">Start Trek</span>
+        {/* Mini Image Frames (Absolute to the H1) - Hidden on Mobile */}
+        <div className="mini-frame hidden md:block absolute -top-[35%] -left-[2%] w-[14%] aspect-square rounded-2xl overflow-hidden shadow-xl z-[-1] border-4 border-white/80 dark:border-darkSlate/80">
+          <img src={miniImages[0]} alt="Trek 1" className="w-full h-full object-cover" />
         </div>
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-peakGreen animate-bounce mt-1 drop-shadow-[0_0_5px_rgba(22,101,52,0.8)]"><path d="m6 9 6 6 6-6"/></svg>
+        <div className="mini-frame hidden md:block absolute -top-[32%] -right-[6%] w-[13%] aspect-square rounded-2xl overflow-hidden shadow-2xl z-20 border-4 border-white/80 dark:border-darkSlate/80">
+          <img src={miniImages[1]} alt="Trek 2" className="w-full h-full object-cover" />
+        </div>
+        <div className="mini-frame hidden md:block absolute -bottom-[32%] left-[2%] w-[12%] aspect-square rounded-2xl overflow-hidden shadow-lg z-20 border-4 border-white/80 dark:border-darkSlate/80">
+          <img src={miniImages[2]} alt="Trek 3" className="w-full h-full object-cover" />
+        </div>
+        <div className="mini-frame hidden md:block absolute -bottom-[38%] -right-[2%] w-[14%] aspect-square rounded-2xl overflow-hidden shadow-xl z-[-1] border-4 border-white/80 dark:border-darkSlate/80">
+          <img src={miniImages[3]} alt="Trek 4" className="w-full h-full object-cover" />
+        </div>
+        <div className="mini-frame hidden md:block absolute -top-[45%] left-[45%] w-[12%] aspect-square rounded-2xl overflow-hidden shadow-lg z-[-1] border-4 border-white/80 dark:border-darkSlate/80">
+          <img src={miniImages[4]} alt="Trek 5" className="w-full h-full object-cover" />
+        </div>
+        <div className="mini-frame hidden md:block absolute -bottom-[45%] right-[35%] w-[13%] aspect-square rounded-2xl overflow-hidden shadow-2xl z-20 border-4 border-white/80 dark:border-darkSlate/80">
+          <img src={miniImages[5]} alt="Trek 6" className="w-full h-full object-cover" />
+        </div>
+
+        {/* WORD 1: PROJECT - Masked container prevents letters from bleeding into text below */}
+        <span className="inline-flex overflow-hidden py-3 px-1 relative z-10">
+          {word1.split('').map((char, index) => {
+            return (
+              <span key={`w1-${index}`} className="inline-block px-[0.02em]">
+                <span className="hero-letter inline-block">
+                  {char}
+                </span>
+              </span>
+            );
+          })}
+        </span>
+
+        {/* WORD 2: PEAK - Masked container prevents letters from bleeding into text below */}
+        <span className="inline-flex overflow-hidden py-3 px-1 relative z-10">
+          {word2.split('').map((char, index) => {
+            return (
+              <span key={`w2-${index}`} className="inline-block px-[0.02em]">
+                <span className="hero-letter inline-block">
+                  {char}
+                </span>
+              </span>
+            );
+          })}
+        </span>
+      </h1>
+
+      {/* Mobile-Only Bento Stack - Wider & Larger for Mobile Hero */}
+      <div className="md:hidden grid grid-cols-2 gap-3 sm:gap-4 mt-8 w-full max-w-full px-1 sm:px-0 mx-auto z-20">
+        <div className="mobile-frame col-span-2 aspect-[2.1/1] rounded-2xl overflow-hidden shadow-xl border-2 border-white/80 dark:border-darkSlate/80">
+          <img src={miniImages[0]} alt="Trek Mobile 1" className="w-full h-full object-cover" />
+        </div>
+        <div className="mobile-frame aspect-square rounded-2xl overflow-hidden shadow-md border-2 border-white/80 dark:border-darkSlate/80">
+          <img src={miniImages[1]} alt="Trek Mobile 2" className="w-full h-full object-cover" />
+        </div>
+        <div className="mobile-frame aspect-square rounded-2xl overflow-hidden shadow-md border-2 border-white/80 dark:border-darkSlate/80">
+          <img src={miniImages[2]} alt="Trek Mobile 3" className="w-full h-full object-cover" />
+        </div>
       </div>
+
+      {/* Nature Statement Tagline & Electric Neon Lime Pill Button */}
+      <div className="max-w-3xl mx-auto mt-12 md:mt-48 flex flex-col items-center text-center relative z-20">
+        <p className="hero-tagline text-darkSlate/80 dark:text-creamBg/80 font-sans text-sm sm:text-base md:text-lg leading-relaxed mb-8 font-semibold">
+          We believe that nature is our true home. We strive to make your Himalayan outdoor experience closer to nature, more comfortable, and unforgettable.
+        </p>
+
+        {/* Electric Neon Lime Pill Button */}
+        <a
+          href="#destinations"
+          className="hero-btn magnetic-btn bg-neonLime hover:bg-[#b8e600] text-black font-condensed font-extrabold text-xl md:text-2xl tracking-widest uppercase px-10 py-3.5 sm:px-14 sm:py-4 rounded-full shadow-[0_10px_35px_rgba(204,255,0,0.35)] hover:scale-105 transition-all flex items-center gap-3"
+        >
+          <span>{t('hero.cta')}</span>
+          <svg className="w-5 h-5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          </svg>
+        </a>
+      </div>
+
     </section>
   );
 };

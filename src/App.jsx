@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
+import BentoGrid from './components/BentoGrid';
 import Destinations from './components/Destinations';
+import LogisticsCards from './components/LogisticsCards';
 import FeaturesBox from './components/FeaturesBox';
 import ItineraryPlanner from './components/ItineraryPlanner';
 import PermitDashboard from './components/PermitDashboard';
@@ -9,34 +11,16 @@ import GearChecker from './components/GearChecker';
 import FitnessCalculator from './components/FitnessCalculator';
 import WeatherWidget from './components/WeatherWidget';
 import Testimonials from './components/Testimonials';
-import CTA from './components/CTA';
+import StatementBanner from './components/StatementBanner';
 import Footer from './components/Footer';
 import Compass from './components/Compass';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { MessageCircle } from 'lucide-react';
+import OfflineDashboard from './components/OfflineDashboard';
+import Preloader from './components/Preloader';
 
 gsap.registerPlugin(ScrollTrigger);
-
-const WhatsAppFloat = () => {
-  const handleClick = () => {
-    const message = "Hi! I'd like to learn more about your trekking packages in Nepal.";
-    window.open(`https://wa.me/9779801234567?text=${encodeURIComponent(message)}`, '_blank');
-  };
-
-  return (
-    <button
-      onClick={handleClick}
-      className="fixed bottom-6 right-6 z-[80] bg-[#25D366] hover:bg-[#20BD5A] text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transition-all hover:scale-110"
-      aria-label="Chat on WhatsApp"
-    >
-      <MessageCircle size={24} />
-    </button>
-  );
-};
-
-import OfflineDashboard from './components/OfflineDashboard';
 
 const useOnlineStatus = () => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
@@ -59,9 +43,10 @@ const useOnlineStatus = () => {
 
 const sections = [
   { id: 'hero', label: 'Top' },
+  { id: 'bento', label: 'Regions' },
   { id: 'destinations', label: 'Treks' },
+  { id: 'logistics', label: 'Logistics' },
   { id: 'itinerary-planner', label: 'Planner' },
-  { id: 'features', label: 'Features' },
   { id: 'weather-widget', label: 'Weather' },
   { id: 'permit-dashboard', label: 'Permits' },
   { id: 'gear-checker', label: 'Gear' },
@@ -105,22 +90,20 @@ const InteractiveTimeline = () => {
   };
 
   return (
-    <div className="fixed right-4 top-1/2 -translate-y-1/2 w-8 z-[80] hidden md:flex flex-col items-center gap-4 py-4">
+    <div className="fixed right-4 top-1/2 -translate-y-1/2 w-8 z-[80] hidden lg:flex flex-col items-center gap-4 py-4">
       {sections.map(({ id, label }, index) => {
         const isActive = activeSection === id;
         return (
           <div key={id} className="relative group w-full flex justify-center">
-            {/* Tooltip */}
-            <div className={`absolute right-6 top-1/2 -translate-y-1/2 bg-peakDark text-white text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none ${isActive ? 'bg-peakGreen' : ''}`}>
+            <div className={`absolute right-6 top-1/2 -translate-y-1/2 bg-darkSlate text-white text-[10px] font-bold uppercase tracking-widest px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none ${isActive ? 'bg-neonLime text-black' : ''}`}>
               {label}
             </div>
             
-            {/* Dot & Line (Line connects to the previous dot if not the first) */}
-            {index > 0 && <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-px h-4 bg-peakDeep/10 dark:bg-white/10" />}
+            {index > 0 && <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-px h-4 bg-darkSlate/10 dark:bg-white/10" />}
             
             <button
               onClick={() => scrollToSection(id)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 relative z-10 ${isActive ? 'bg-peakGreen scale-150 shadow-[0_0_8px_rgba(22,101,52,0.8)]' : 'bg-peakDeep/20 dark:bg-white/20 hover:bg-peakDeep/40 dark:hover:bg-white/40'}`}
+              className={`w-3 h-3 rounded-full transition-all duration-300 relative z-10 ${isActive ? 'bg-neonLime scale-150 shadow-[0_0_8px_rgba(204,255,0,0.8)]' : 'bg-darkSlate/20 dark:bg-white/20 hover:bg-darkSlate/40'}`}
               aria-label={`Scroll to ${label}`}
             />
           </div>
@@ -132,6 +115,7 @@ const InteractiveTimeline = () => {
 
 function App() {
   const [compassOpen, setCompassOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const isOnline = useOnlineStatus();
 
   useEffect(() => {
@@ -152,38 +136,68 @@ function App() {
     };
   }, []);
 
-  // Return OfflineDashboard early if the user is completely offline.
   if (!isOnline) {
     return <OfflineDashboard />;
   }
 
   return (
-    <>
-      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-peakGreen focus:text-white focus:px-4 focus:py-2 focus:rounded">
+    <div className="min-h-screen bg-creamCanvas text-darkSlate dark:bg-[#121c27] dark:text-creamBg relative selection:bg-neonLime selection:text-black">
+      {loading && <Preloader onComplete={() => setLoading(false)} />}
+      
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:bg-neonLime focus:text-black focus:px-4 focus:py-2 focus:rounded font-bold">
         Skip to content
       </a>
+
       <InteractiveTimeline />
-      <WhatsAppFloat />
       <Navbar onCompassOpen={() => setCompassOpen(true)} />
       <Compass isOpen={compassOpen} onClose={() => setCompassOpen(false)} />
-      <main id="main-content">
-        <Hero />
-        <Destinations />
-        <ItineraryPlanner />
-        <FeaturesBox />
-        <WeatherWidget />
-        <div id="permit-dashboard">
-          <PermitDashboard />
-        </div>
-        <GearChecker />
-        <div id="fitness-calculator">
-          <FitnessCalculator />
-        </div>
-        <Testimonials />
-        <CTA />
-      </main>
-      <Footer />
-    </>
+
+      <div className="w-full">
+        <main id="main-content">
+          <Hero ready={!loading} />
+          
+          <div id="bento">
+            <BentoGrid />
+          </div>
+
+          <Destinations />
+
+          <div id="logistics">
+            <LogisticsCards />
+          </div>
+
+          <div id="itinerary-planner">
+            <ItineraryPlanner />
+          </div>
+
+          <FeaturesBox />
+
+          <div id="weather-widget">
+            <WeatherWidget />
+          </div>
+
+          <div id="permit-dashboard">
+            <PermitDashboard />
+          </div>
+
+          <div id="gear-checker">
+            <GearChecker />
+          </div>
+
+          <div id="fitness-calculator">
+            <FitnessCalculator />
+          </div>
+
+          <div id="testimonials">
+            <Testimonials />
+          </div>
+
+          <StatementBanner />
+        </main>
+
+        <Footer />
+      </div>
+    </div>
   );
 }
 

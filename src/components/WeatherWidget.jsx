@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Thermometer, Wind, CloudRain, Sun, Cloud, Snowflake, Loader2 } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Thermometer, Wind, CloudRain, Sun, Cloud, Snowflake, Loader2, Gauge, ShieldAlert } from 'lucide-react';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const locations = [
-  { name: 'Kathmandu', altitude: '1,400m', lat: 27.7172, lon: 85.3240 },
-  { name: 'Lukla', altitude: '2,860m', lat: 27.6861, lon: 86.7300 },
-  { name: 'Namche Bazaar', altitude: '3,440m', lat: 27.8069, lon: 86.7140 },
-  { name: 'EBC', altitude: '5,364m', lat: 27.9861, lon: 86.9226 },
-  { name: 'Pokhara', altitude: '827m', lat: 28.2096, lon: 83.9856 },
-  { name: 'Thorong La', altitude: '5,416m', lat: 28.7936, lon: 83.9366 },
+  { name: 'Kathmandu', altitude: '1,400m', lat: 27.7172, lon: 85.3240, freezeAlt: '4,200m', uv: 'High (7)' },
+  { name: 'Lukla', altitude: '2,860m', lat: 27.6861, lon: 86.7300, freezeAlt: '3,800m', uv: 'Extreme (9)' },
+  { name: 'Namche Bazaar', altitude: '3,440m', lat: 27.8069, lon: 86.7140, freezeAlt: '3,500m', uv: 'Extreme (10)' },
+  { name: 'EBC', altitude: '5,364m', lat: 27.9861, lon: 86.9226, freezeAlt: '2,900m', uv: 'Extreme (11+)' },
+  { name: 'Pokhara', altitude: '827m', lat: 28.2096, lon: 83.9856, freezeAlt: '4,800m', uv: 'Moderate (5)' },
+  { name: 'Thorong La', altitude: '5,416m', lat: 28.7936, lon: 83.9366, freezeAlt: '2,800m', uv: 'Extreme (11+)' },
 ];
 
 const conditionIcons = {
@@ -22,13 +26,37 @@ const mapWeatherCode = (code) => {
   if ([1, 2, 3, 45, 48].includes(code)) return 'cloudy';
   if ([51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82, 95, 96, 99].includes(code)) return 'rain';
   if ([71, 73, 75, 77, 85, 86].includes(code)) return 'snow';
-  return 'sunny'; // default fallback
+  return 'sunny';
 };
 
 const WeatherWidget = () => {
   const [selected, setSelected] = useState(0);
   const [weatherData, setWeatherData] = useState({});
   const [loading, setLoading] = useState(true);
+  const sectionRef = useRef(null);
+  const cardRef = useRef(null);
+
+  useEffect(() => {
+    let ctx = gsap.context(() => {
+      gsap.fromTo(
+        cardRef.current,
+        { opacity: 0, y: 35, scale: 0.96 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.85,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 80%',
+          }
+        }
+      );
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -59,7 +87,6 @@ const WeatherWidget = () => {
         }
       } catch (error) {
         console.error("Failed to fetch weather data", error);
-        // Fallback or silent fail
         if (isMounted) setLoading(false);
       }
     };
@@ -71,20 +98,28 @@ const WeatherWidget = () => {
   const loc = locations[selected];
   const currentData = weatherData[selected];
   
-  // Use current data or default to placeholders if loading/failed
-  const temp = currentData ? currentData.temp : '--';
-  const wind = currentData ? currentData.wind : '--';
-  const humidity = currentData ? currentData.humidity : '--';
+  const temp = currentData ? currentData.temp : 0;
+  const wind = currentData ? currentData.wind : 0;
+  const humidity = currentData ? currentData.humidity : 0;
   const conditionStr = currentData ? currentData.condition : 'cloudy';
   
   const Icon = loading ? Loader2 : (conditionIcons[conditionStr] || Sun);
 
+  // Meter calculations
+  const windPercent = Math.min(100, Math.max(10, (wind / 60) * 100));
+  const humidityPercent = Math.min(100, Math.max(10, humidity));
+
   return (
-    <section id="weather-widget" className="py-16 px-6 md:px-16 w-full bg-gray-50 dark:bg-peakDeep/50 transition-colors">
-      <div className="max-w-5xl mx-auto">
-        <h3 className="font-display font-bold text-2xl md:text-3xl text-peakDeep dark:text-peakWhite mb-8 text-center">
-          Live Trail Weather Conditions
-        </h3>
+    <section id="weather-widget" ref={sectionRef} className="py-6 md:py-10 px-4 sm:px-6 md:px-12 w-full">
+      <div className="max-w-[1600px] mx-auto">
+        <div className="text-center mb-8">
+          <span className="bg-neonLime text-black px-3.5 py-1 rounded-full text-xs font-extrabold uppercase tracking-widest inline-block mb-2 shadow-sm">
+            REAL-TIME TRAIL FORECAST
+          </span>
+          <h3 className="font-condensed font-extrabold text-4xl sm:text-5xl uppercase text-darkSlate dark:text-creamBg tracking-wide">
+            LIVE TRAIL WEATHER CONDITIONS
+          </h3>
+        </div>
         
         {/* Location tabs */}
         <div className="flex flex-wrap gap-2 justify-center mb-8">
@@ -92,10 +127,10 @@ const WeatherWidget = () => {
             <button
               key={i}
               onClick={() => setSelected(i)}
-              className={`px-4 py-2 rounded-full font-sans text-xs font-bold uppercase tracking-wider transition-all ${
+              className={`px-4 py-2 rounded-full font-sans text-xs font-extrabold uppercase tracking-wider transition-all ${
                 i === selected 
-                  ? 'bg-peakGreen text-white' 
-                  : 'bg-black/5 dark:bg-white/10 text-peakDeep dark:text-peakWhite hover:bg-peakGreen/10'
+                  ? 'bg-neonLime text-black shadow-md scale-105' 
+                  : 'bg-creamCard dark:bg-black/20 text-darkSlate dark:text-creamBg hover:bg-black/10'
               }`}
             >
               {item.name}
@@ -103,41 +138,88 @@ const WeatherWidget = () => {
           ))}
         </div>
 
-        {/* Weather card */}
-        <div className="bg-white dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-3xl p-6 sm:p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 min-h-[300px] md:min-h-[200px] transition-all relative overflow-hidden">
+        {/* Weather card with Barometric Meter Gauges & Hover Height Extension */}
+        <div
+          ref={cardRef}
+          className="bg-white dark:bg-darkSlate/80 border border-creamBorder/80 dark:border-white/10 rounded-3xl p-6 sm:p-8 md:p-10 flex flex-col gap-6 shadow-sm hover:shadow-xl transition-all duration-500 relative overflow-hidden group cursor-pointer"
+        >
           
           {loading && (
-            <div className="absolute inset-0 bg-white/50 dark:bg-peakDeep/50 backdrop-blur-sm z-10 flex items-center justify-center">
-              <Loader2 className="animate-spin text-peakGreen" size={40} />
+            <div className="absolute inset-0 bg-white/60 dark:bg-darkSlate/60 backdrop-blur-sm z-20 flex items-center justify-center">
+              <Loader2 className="animate-spin text-darkSlate dark:text-neonLime" size={40} />
             </div>
           )}
 
-          <div className="text-center md:text-left z-0 flex-1">
-            <p className="font-sans text-peakDeep/50 dark:text-peakWhite/50 text-sm mb-1">{loc.altitude} altitude</p>
-            <h4 className="font-display font-bold text-3xl text-peakDeep dark:text-peakWhite mb-2">{loc.name}</h4>
-            <p className="font-sans text-5xl font-bold text-peakDeep dark:text-peakWhite">{temp}°C</p>
-          </div>
-          
-          <div className="z-0 flex justify-center flex-1">
-            <Icon size={64} className={`text-peakGreen ${loading ? 'animate-spin opacity-50' : ''}`} strokeWidth={1.5} />
+          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+            <div className="text-center md:text-left flex-1">
+              <span className="font-sans text-xs font-bold text-darkSlate/50 dark:text-creamBg/50 uppercase tracking-widest block mb-1">
+                Altitude: {loc.altitude}
+              </span>
+              <h4 className="font-condensed font-extrabold text-4xl text-darkSlate dark:text-creamBg uppercase mb-1">{loc.name}</h4>
+              <p className="font-condensed font-extrabold text-6xl text-darkSlate dark:text-creamBg">{temp}°C</p>
+            </div>
+            
+            <div className="flex justify-center flex-1">
+              <Icon size={64} className={`text-darkSlate dark:text-neonLime transition-transform duration-500 group-hover:scale-110 ${loading ? 'animate-spin opacity-50' : ''}`} strokeWidth={1.5} />
+            </div>
+
+            {/* Barometric Meters */}
+            <div className="grid grid-cols-2 gap-x-8 gap-y-4 text-center flex-1 w-full">
+              <div>
+                <Wind size={20} className="text-slateTeal dark:text-neonLime mx-auto mb-1" />
+                <p className="font-sans text-[11px] font-bold text-darkSlate/50 dark:text-creamBg/50 uppercase tracking-wider">Wind Speed</p>
+                <p className="font-sans font-extrabold text-base text-darkSlate dark:text-creamBg mb-1.5">{wind} km/h</p>
+                
+                {/* Wind Barometer Meter Fill */}
+                <div className="w-full h-1.5 bg-black/10 dark:bg-white/10 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-slateTeal dark:bg-neonLime rounded-full transition-all duration-700 ease-out"
+                    style={{ width: `${windPercent}%` }}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Thermometer size={20} className="text-slateTeal dark:text-neonLime mx-auto mb-1" />
+                <p className="font-sans text-[11px] font-bold text-darkSlate/50 dark:text-creamBg/50 uppercase tracking-wider">Humidity</p>
+                <p className="font-sans font-extrabold text-base text-darkSlate dark:text-creamBg mb-1.5">{humidity}%</p>
+                
+                {/* Humidity Meter Fill */}
+                <div className="w-full h-1.5 bg-black/10 dark:bg-white/10 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-slateTeal dark:bg-neonLime rounded-full transition-all duration-700 ease-out"
+                    style={{ width: `${humidityPercent}%` }}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="z-0 grid grid-cols-2 gap-x-8 gap-y-4 text-center flex-1">
-            <div>
-              <Wind size={18} className="text-peakGreen mx-auto mb-1" />
-              <p className="font-sans text-xs text-peakDeep/50 dark:text-peakWhite/50">Wind</p>
-              <p className="font-sans font-bold text-peakDeep dark:text-peakWhite">{wind} km/h</p>
-            </div>
-            <div>
-              <Thermometer size={18} className="text-peakGreen mx-auto mb-1" />
-              <p className="font-sans text-xs text-peakDeep/50 dark:text-peakWhite/50">Humidity</p>
-              <p className="font-sans font-bold text-peakDeep dark:text-peakWhite">{humidity}%</p>
+          {/* Hover Height Extension - Extra Barometric Trail Metrics */}
+          <div className="max-h-0 group-hover:max-h-32 overflow-hidden transition-all duration-500 ease-in-out opacity-0 group-hover:opacity-100 border-t border-creamBorder/50 dark:border-white/10 pt-4">
+            <div className="grid grid-cols-3 gap-4 text-center text-xs">
+              <div className="bg-creamCanvas dark:bg-black/20 p-3 rounded-2xl">
+                <Gauge size={16} className="text-slateTeal dark:text-neonLime mx-auto mb-1" />
+                <span className="font-sans text-[10px] uppercase font-semibold opacity-60 block">Freezing Level</span>
+                <span className="font-sans font-bold text-darkSlate dark:text-creamBg">{loc.freezeAlt}</span>
+              </div>
+              <div className="bg-creamCanvas dark:bg-black/20 p-3 rounded-2xl">
+                <Sun size={16} className="text-slateTeal dark:text-neonLime mx-auto mb-1" />
+                <span className="font-sans text-[10px] uppercase font-semibold opacity-60 block">UV Index</span>
+                <span className="font-sans font-bold text-darkSlate dark:text-creamBg">{loc.uv}</span>
+              </div>
+              <div className="bg-creamCanvas dark:bg-black/20 p-3 rounded-2xl">
+                <ShieldAlert size={16} className="text-slateTeal dark:text-neonLime mx-auto mb-1" />
+                <span className="font-sans text-[10px] uppercase font-semibold opacity-60 block">Trail Advisory</span>
+                <span className="font-sans font-bold text-darkSlate dark:text-creamBg">Clear Passage</span>
+              </div>
             </div>
           </div>
+
         </div>
 
-        <p className="text-center mt-4 font-sans text-xs text-peakDeep/40 dark:text-peakWhite/40">
-          Powered by <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer" className="underline hover:text-peakGreen">Open-Meteo</a> free, open-source weather API.
+        <p className="text-center mt-4 font-sans text-xs text-darkSlate/50 dark:text-creamBg/50">
+          Powered by <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer" className="underline hover:text-black">Open-Meteo API</a>.
         </p>
       </div>
     </section>

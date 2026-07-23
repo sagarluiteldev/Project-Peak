@@ -130,8 +130,8 @@ const TrailMap = ({ isOpen, onClose, trekName }) => {
         <div className="px-6 py-4 border-t border-black/5 dark:border-white/10 max-h-48 overflow-y-auto">
           <div className="flex flex-wrap gap-2">
             {route?.waypoints.map((wp, i) => (
-              <span key={i} className="flex items-center gap-1 px-3 py-1 rounded-full bg-black/5 dark:bg-white/10 font-sans text-xs text-peakDeep dark:text-peakWhite">
-                <MapPin size={10} className="text-peakGreen" />
+              <span key={i} className="flex items-center gap-1 px-3 py-1 rounded-full bg-creamCard dark:bg-black/20 font-sans text-xs text-darkSlate dark:text-creamBg border border-creamBorder/50">
+                <MapPin size={10} className="text-slateTeal dark:text-neonLime" />
                 {wp[2]}
               </span>
             ))}

@@ -38,7 +38,7 @@ const Navbar = ({ onCompassOpen }) => {
         
         <div className="hidden md:flex gap-6 items-center font-sans tracking-wider text-xs uppercase font-semibold">
           {navLinks.map(link => (
-            <a key={link.href} href={link.href} className="hover-lift hover:text-peakGreen transition-colors">{link.label}</a>
+            <a key={link.href} href={link.href} className="hover-lift hover:text-neonLime transition-colors">{link.label}</a>
           ))}
         </div>
         
@@ -103,11 +103,11 @@ const Navbar = ({ onCompassOpen }) => {
         <div className="md:hidden mt-2 mx-auto max-w-7xl bg-white/95 dark:bg-peakDeep/95 backdrop-blur-xl rounded-2xl border border-black/5 dark:border-white/10 shadow-xl p-6 flex flex-col gap-4">
           {navLinks.map(link => (
             <a key={link.href} href={link.href}
-              className="font-sans text-lg font-semibold py-2 border-b border-black/5 dark:border-white/10 hover:text-peakGreen transition-colors"
+              className="font-sans text-lg font-semibold py-2 border-b border-black/5 dark:border-white/10 hover:text-neonLime transition-colors"
               onClick={() => setMobileOpen(false)}>{link.label}</a>
           ))}
           <button onClick={() => { onCompassOpen(); setMobileOpen(false); }}
-            className="font-sans text-lg font-semibold py-2 border-b border-black/5 dark:border-white/10 hover:text-peakGreen transition-colors text-left flex items-center gap-2">
+            className="font-sans text-lg font-semibold py-2 border-b border-black/5 dark:border-white/10 hover:text-neonLime transition-colors text-left flex items-center gap-2">
             <CompassIcon size={18} /> Compass
           </button>
           

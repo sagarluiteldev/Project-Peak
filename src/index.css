@@ -10,21 +10,21 @@
     100% { transform: translateY(200%); opacity: 0; }
   }
   :root {
-    --bg-color: #f8fafc;
-    --text-color: #0f172a;
-    --border-color: rgba(15, 23, 42, 0.1);
+    --bg-color: #F4F0E8;
+    --text-color: #1C2933;
+    --border-color: #E0D9CC;
   }
 
   .dark {
-    --bg-color: #020617;
-    --text-color: #f8fafc;
-    --border-color: rgba(248, 250, 252, 0.1);
+    --bg-color: #0e1720;
+    --text-color: #F4F0E8;
+    --border-color: rgba(224, 217, 204, 0.15);
   }
 
   body {
     background-color: var(--bg-color);
     color: var(--text-color);
-    @apply overflow-x-hidden transition-colors duration-300;
+    @apply overflow-x-hidden transition-colors duration-300 font-sans selection:bg-[#CCFF00] selection:text-black;
   }
 }
 

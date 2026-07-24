@@ -72,8 +72,8 @@ const PermitDashboard = () => {
         
         {/* Header */}
         <div className="text-center mb-10 md:mb-12">
-          <div className="inline-flex items-center gap-2 bg-neonLime/30 text-darkSlate dark:text-creamBg px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-3 shadow-sm">
-            <CreditCard size={16} className="text-darkSlate dark:text-neonLime" /> Visas, Permits & Flight Routing
+          <div className="inline-flex items-center gap-2 bg-neonLime text-black px-3.5 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wider mb-3 shadow-sm">
+            <CreditCard size={16} className="text-black" /> Visas, Permits & Flight Routing
           </div>
           <h2 className="font-condensed font-extrabold text-4xl sm:text-5xl md:text-6xl uppercase text-darkSlate dark:text-creamBg tracking-wide">
             NEPAL TRAVEL & PERMITS HUB

@@ -94,8 +94,8 @@ const FitnessCalculator = () => {
         <div className="fitness-card flex-1 bg-white dark:bg-darkSlate/80 border border-creamBorder/80 dark:border-white/10 rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-sm hover:shadow-xl transition-all duration-300 relative">
           <div>
             <div className="flex items-center justify-between mb-4">
-              <div className="inline-flex items-center gap-2 bg-neonLime/30 text-darkSlate dark:text-creamBg px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
-                <Flame size={16} className="text-darkSlate dark:text-neonLime" /> Fitness & Calorie Prep
+              <div className="inline-flex items-center gap-2 bg-neonLime text-black px-3.5 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wider shadow-sm">
+                <Flame size={16} className="text-black" /> Fitness & Calorie Prep
               </div>
               <HeartPulse size={24} className="text-slateTeal dark:text-neonLime animate-pulse" />
             </div>

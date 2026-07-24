@@ -138,8 +138,8 @@ const GearChecker = () => {
         className="gear-summary-card max-w-[1600px] mx-auto bg-white dark:bg-darkSlate/80 border border-creamBorder/80 dark:border-white/10 rounded-3xl p-6 md:p-10 cursor-pointer shadow-sm hover:shadow-2xl transition-all duration-300 group flex flex-col md:flex-row items-center gap-8 md:gap-12"
       >
         <div className="flex-1 text-center md:text-left">
-          <div className="inline-flex items-center gap-2 bg-neonLime/30 text-darkSlate dark:text-creamBg px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
-            <Backpack size={16} className="text-darkSlate dark:text-neonLime" /> Packing Checklist & Weight Budget
+          <div className="inline-flex items-center gap-2 bg-neonLime text-black px-3.5 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wider mb-4 shadow-sm">
+            <Backpack size={16} className="text-black" /> Packing Checklist & Weight Budget
           </div>
           <h2 className="font-condensed font-extrabold text-4xl sm:text-5xl md:text-6xl uppercase text-darkSlate dark:text-creamBg tracking-wide mb-3 group-hover:text-slateTeal dark:group-hover:text-neonLime transition-colors">
             GEAR & PACK WEIGHT ESTIMATOR

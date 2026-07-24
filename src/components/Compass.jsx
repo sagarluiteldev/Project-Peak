@@ -283,11 +283,11 @@ const Compass = ({ isOpen, onClose }) => {
 
   return (
     <div 
-      className="fixed inset-0 z-[100] bg-black/75 backdrop-blur-md flex items-center justify-center p-4 select-none animate-in fade-in duration-300"
+      className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 select-none animate-in fade-in duration-300"
       onClick={onClose}
     >
       <div 
-        className="bg-[#0b131b]/90 border border-white/15 rounded-3xl p-6 sm:p-8 max-w-lg w-full relative shadow-[0_25px_60px_rgba(0,0,0,0.8)] backdrop-blur-xl text-white"
+        className="bg-[#0c1620]/95 border border-white/15 rounded-3xl p-6 sm:p-8 max-w-md w-full relative shadow-[0_25px_60px_rgba(0,0,0,0.85)] text-white text-center"
         onClick={(e) => e.stopPropagation()}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
@@ -302,88 +302,59 @@ const Compass = ({ isOpen, onClose }) => {
           <X size={18} />
         </button>
 
-        {/* Top Header Badge */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-neonLime animate-ping" />
-            <span className="font-sans text-[10px] font-extrabold uppercase tracking-widest text-neonLime">
-              {isManual ? 'MANUAL OVERRIDE' : 'TACTICAL HUD V3.4'}
-            </span>
-          </div>
-          <span className="font-sans text-[10px] uppercase tracking-wider text-white/40 font-semibold flex items-center gap-1">
-            <ShieldCheck size={12} className="text-neonLime" /> GPS & GYRO SYNCED
-          </span>
-        </div>
-
-        <h2 className="font-condensed font-extrabold text-3xl sm:text-4xl text-creamBg text-center uppercase tracking-wide">
+        {/* Clean Header */}
+        <h2 className="font-condensed font-extrabold text-3xl sm:text-4xl text-creamBg uppercase tracking-wider mb-5 pt-1">
           {t('nav.compass')}
         </h2>
-        <p className="font-sans text-xs text-creamBg/60 mb-6 text-center">
-          Real-time high-definition Himalayan navigation sensor
-        </p>
 
         {/* Compass Canvas Container */}
         <div className="flex flex-col items-center">
-          <div className="relative group cursor-grab active:cursor-grabbing">
+          <div className="relative cursor-grab active:cursor-grabbing mb-4">
             <canvas 
               ref={canvasRef} 
-              className="mx-auto transition-transform duration-100" 
-              style={{ width: '340px', height: '340px' }} 
+              className="mx-auto" 
+              style={{ width: '280px', height: '280px' }} 
             />
           </div>
 
-          {/* Digital Telemetry Display Bar */}
-          <div className="w-full mt-6 bg-black/40 border border-white/10 rounded-2xl p-4 flex items-center justify-between">
-            <div className="text-left">
-              <span className="font-sans text-[10px] font-bold uppercase tracking-widest text-white/50 block mb-0.5">
-                BEARING / AZIMUTH
-              </span>
-              <p className="font-condensed font-extrabold text-4xl text-neonLime tracking-tight flex items-baseline gap-2">
+          {/* Centered Bearing Telemetry */}
+          <div className="w-full bg-black/50 border border-white/10 rounded-2xl py-3 px-6 flex items-center justify-between mb-4">
+            <span className="font-sans text-xs font-bold uppercase tracking-widest text-white/60">
+              BEARING
+            </span>
+            <div className="flex items-center gap-2">
+              <span className="font-condensed font-extrabold text-3xl text-neonLime tracking-tight">
                 {Math.round(heading)}°
-                <span className="font-sans text-xs font-bold bg-neonLime/20 text-neonLime px-2.5 py-0.5 rounded-md border border-neonLime/30">
-                  {getDirection(heading)}
-                </span>
-              </p>
-            </div>
-
-            <div className="text-right flex items-center gap-4">
-              <div>
-                <span className="font-sans text-[9px] font-bold uppercase tracking-wider text-white/40 block">PITCH</span>
-                <span className="font-condensed font-bold text-lg text-white">{pitch}°</span>
-              </div>
-              <div className="w-px h-8 bg-white/10" />
-              <div>
-                <span className="font-sans text-[9px] font-bold uppercase tracking-wider text-white/40 block">ROLL</span>
-                <span className="font-condensed font-bold text-lg text-white">{roll}°</span>
-              </div>
+              </span>
+              <span className="font-sans text-xs font-bold bg-neonLime/20 text-neonLime px-2.5 py-1 rounded-md border border-neonLime/30">
+                {getDirection(heading)}
+              </span>
             </div>
           </div>
 
-          {/* Quick Presets & Sensor Reset Bar */}
-          <div className="w-full flex items-center justify-between gap-2 mt-4">
-            <div className="flex items-center gap-1.5">
-              {[0, 90, 180, 270].map((deg) => (
-                <button
-                  key={deg}
-                  onClick={() => { setHeading(deg); setIsManual(true); }}
-                  className={`px-3 py-1.5 rounded-lg font-sans text-[11px] font-extrabold uppercase transition-all ${
-                    Math.round(heading) === deg
-                      ? 'bg-neonLime text-black shadow-sm'
-                      : 'bg-white/5 text-white/70 hover:bg-white/15'
-                  }`}
-                >
-                  {deg === 0 ? 'N 0°' : deg === 90 ? 'E 90°' : deg === 180 ? 'S 180°' : 'W 270°'}
-                </button>
-              ))}
-            </div>
+          {/* Centered Direction Buttons */}
+          <div className="w-full flex items-center justify-center gap-2">
+            {[0, 90, 180, 270].map((deg) => (
+              <button
+                key={deg}
+                onClick={() => { setHeading(deg); setIsManual(true); }}
+                className={`px-3.5 py-1.5 rounded-xl font-sans text-xs font-extrabold uppercase transition-all ${
+                  Math.round(heading) === deg
+                    ? 'bg-neonLime text-black shadow-md scale-105'
+                    : 'bg-white/5 text-white/70 hover:bg-white/15'
+                }`}
+              >
+                {deg === 0 ? 'N 0°' : deg === 90 ? 'E 90°' : deg === 180 ? 'S 180°' : 'W 270°'}
+              </button>
+            ))}
 
             {isManual && (
               <button
                 onClick={() => { setIsManual(false); requestPermission(); }}
-                className="p-2 rounded-lg bg-neonLime/20 text-neonLime hover:bg-neonLime hover:text-black transition-colors flex items-center gap-1 font-sans text-[10px] font-bold uppercase"
-                title="Reset to Live Sensor"
+                className="px-3 py-1.5 rounded-xl bg-neonLime/20 text-neonLime hover:bg-neonLime hover:text-black transition-colors flex items-center gap-1 font-sans text-xs font-extrabold uppercase"
+                title="Sync Sensor"
               >
-                <RotateCcw size={12} /> SYNC
+                <RotateCcw size={13} />
               </button>
             )}
           </div>

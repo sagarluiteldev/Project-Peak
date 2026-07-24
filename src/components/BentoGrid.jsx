@@ -158,17 +158,17 @@ const BentoGrid = () => {
                 <div
                   key={cat.id}
                   onClick={scrollToDestinations}
-                  className={`bento-card ${cat.colSpan} ${cat.height} bg-slateTeal dark:bg-slateTeal/90 text-white rounded-3xl p-6 flex flex-col items-center justify-center text-center cursor-pointer group hover:bg-[#2b4453] transition-all shadow-md relative overflow-hidden`}
+                  className={`bento-card ${cat.colSpan} ${cat.height} bg-neonLime hover:bg-[#b8e600] text-black rounded-3xl p-6 flex flex-col items-center justify-center text-center cursor-pointer group transition-all shadow-md hover:shadow-xl relative overflow-hidden`}
                 >
                   <div className="relative z-10 flex flex-col items-center">
                     <span className="font-condensed text-4xl md:text-5xl tracking-widest uppercase mb-1 font-extrabold group-hover:scale-105 transition-transform duration-300">
-                      {cat.title}
+                      {t('bento.all.title')}
                     </span>
-                    <span className="text-white/70 font-sans text-xs uppercase tracking-wider font-semibold flex items-center gap-1.5 group-hover:text-white transition-colors">
-                      {cat.subtitle} <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+                    <span className="text-black/80 font-sans text-xs uppercase tracking-wider font-bold flex items-center gap-1.5 transition-colors">
+                      {t('bento.all.sub')} <ArrowUpRight size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300 stroke-[2.5]" />
                     </span>
                   </div>
-                  <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </div>
               );
             }

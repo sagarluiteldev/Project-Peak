@@ -2,10 +2,12 @@ import React, { useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ShieldCheck, MapPin, Clock, CheckCircle2 } from 'lucide-react';
+import { useSettings } from '../context/SettingsContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const LogisticsCards = () => {
+  const { t } = useSettings();
   const sectionRef = useRef(null);
 
   useEffect(() => {

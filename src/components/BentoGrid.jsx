@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowUpRight } from 'lucide-react';
 import { treks } from '../data/treks';
+import { useSettings } from '../context/SettingsContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -63,6 +64,7 @@ const categories = [
 ];
 
 const BentoGrid = () => {
+  const { t } = useSettings();
   const sectionRef = useRef(null);
 
   useEffect(() => {

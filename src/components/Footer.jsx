@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Facebook, Instagram, Twitter, MessageCircle, ArrowRight, ShieldCheck, Mountain } from 'lucide-react';
+import { useSettings } from '../context/SettingsContext';
 
 const Footer = () => {
+  const { t } = useSettings();
   const [email, setEmail] = useState('');
   const [firstName, setFirstName] = useState('');
 
@@ -61,19 +63,19 @@ const Footer = () => {
 
               <ul className="font-sans text-sm font-semibold space-y-3 text-creamBg/85">
                 <li>
-                  <a href="#hero" className="hover:text-neonLime transition-colors">About Us</a>
+                  <a href="#hero" className="hover:text-neonLime transition-colors">{t('footer.aboutUs')}</a>
                 </li>
                 <li>
-                  <a href="#destinations" className="hover:text-neonLime transition-colors">Expeditions & Treks</a>
+                  <a href="#destinations" className="hover:text-neonLime transition-colors">{t('footer.expeditions')}</a>
                 </li>
                 <li>
-                  <a href="#permit-dashboard" className="hover:text-neonLime transition-colors">Permits & Logistics</a>
+                  <a href="#permit-dashboard" className="hover:text-neonLime transition-colors">{t('footer.permits')}</a>
                 </li>
                 <li>
-                  <a href="#weather-widget" className="hover:text-neonLime transition-colors">Weather & Trail Advisory</a>
+                  <a href="#weather-widget" className="hover:text-neonLime transition-colors">{t('footer.weather')}</a>
                 </li>
                 <li>
-                  <a href="https://wa.me/9779801234567" target="_blank" rel="noreferrer" className="hover:text-neonLime transition-colors">Join Our Team</a>
+                  <a href="https://wa.me/9779801234567" target="_blank" rel="noreferrer" className="hover:text-neonLime transition-colors">{t('footer.joinTeam')}</a>
                 </li>
               </ul>
             </div>
@@ -114,10 +116,10 @@ const Footer = () => {
           {/* Column 2: Center Newsletter Subscription */}
           <div className="md:px-10 md:border-r md:border-white/15 flex flex-col justify-center text-center items-center">
             <h3 className="font-condensed text-3xl sm:text-4xl text-creamBg font-extrabold uppercase tracking-wide mb-2">
-              GET EXPEDITION UPDATES
+              {t('footer.getUpdates')}
             </h3>
             <p className="font-sans text-xs text-creamBg/75 max-w-sm mb-6 leading-relaxed">
-              Subscribe to our newsletter to receive live Himalayan trail conditions, permit advisories, and exclusive trek announcements.
+              {t('footer.getUpdatesSub')}
             </p>
 
             <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-3">
@@ -125,7 +127,7 @@ const Footer = () => {
                 <input
                   type="email"
                   required
-                  placeholder="*Email Address"
+                  placeholder={t('footer.emailPlaceholder')}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full bg-black/20 border border-white/20 rounded-xl px-4 py-3 font-sans text-xs text-creamBg placeholder:text-creamBg/50 focus:outline-none focus:border-neonLime transition-colors"
@@ -134,7 +136,7 @@ const Footer = () => {
               <div className="flex gap-2">
                 <input
                   type="text"
-                  placeholder="*First Name"
+                  placeholder={t('footer.firstNamePlaceholder')}
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   className="flex-1 bg-black/20 border border-white/20 rounded-xl px-4 py-3 font-sans text-xs text-creamBg placeholder:text-creamBg/50 focus:outline-none focus:border-neonLime transition-colors"
@@ -143,7 +145,7 @@ const Footer = () => {
                   type="submit"
                   className="bg-neonLime hover:bg-[#b8e600] text-black font-condensed font-extrabold text-sm uppercase tracking-wider px-6 py-3 rounded-xl shadow-md hover:scale-105 transition-all shrink-0 cursor-pointer"
                 >
-                  SIGN UP
+                  {t('footer.signUp')}
                 </button>
               </div>
             </form>
@@ -156,7 +158,7 @@ const Footer = () => {
                 onClick={openWhatsApp}
                 className="font-condensed font-extrabold text-xl uppercase tracking-wide text-creamBg hover:text-neonLime transition-colors inline-flex items-center gap-2 mb-4 group cursor-pointer"
               >
-                <span>Send Us A Message</span>
+                <span>{t('footer.sendMessage')}</span>
                 <ArrowRight size={20} className="group-hover:translate-x-1.5 transition-transform text-neonLime" />
               </button>
 
@@ -174,8 +176,8 @@ const Footer = () => {
               <div className="inline-flex items-center gap-2.5 border border-white/20 rounded-2xl px-4 py-2.5 bg-black/20">
                 <ShieldCheck size={22} className="text-neonLime shrink-0" />
                 <div className="text-left font-sans text-[10px] uppercase font-bold tracking-wider leading-tight text-creamBg/90">
-                  <span>NTB & TAAN ACCREDITED</span>
-                  <span className="block text-creamBg/50 text-[9px]">Expedition License #4820</span>
+                  <span>{t('footer.accredited')}</span>
+                  <span className="block text-creamBg/50 text-[9px]">{t('footer.license')}</span>
                 </div>
               </div>
             </div>
@@ -188,12 +190,12 @@ const Footer = () => {
       {/* 3. Sub-Footer Bottom Bar */}
       <div className="bg-[#1c2b33] dark:bg-[#0b1217] border-t border-white/10 py-4 px-6 sm:px-10 md:px-16 text-[11px] font-sans text-creamBg/50 flex flex-col sm:flex-row justify-between items-center gap-2">
         <div>
-          © {new Date().getFullYear()} Project Peak Expeditions Ltd. All Rights Reserved.
+          © {new Date().getFullYear()} Project Peak Expeditions Ltd. {t('footer.rights')}
         </div>
         <div className="flex items-center gap-6 font-semibold">
-          <a href="#" className="hover:text-neonLime transition-colors">Privacy Policy</a>
-          <a href="#" className="hover:text-neonLime transition-colors">Terms of Service</a>
-          <span className="text-creamBg/40">Website By Project Peak</span>
+          <a href="#" className="hover:text-neonLime transition-colors">{t('footer.privacy')}</a>
+          <a href="#" className="hover:text-neonLime transition-colors">{t('footer.terms')}</a>
+          <span className="text-creamBg/40">{t('footer.by')}</span>
         </div>
       </div>
 

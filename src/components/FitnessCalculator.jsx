@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Activity, Dumbbell, Flame, TrendingDown, Target, ArrowRight, HeartPulse } from 'lucide-react';
+import { Flame, Activity, ArrowRight, Zap, Trophy, HeartPulse } from 'lucide-react';
 import { treks } from '../data/treks';
+import { useSettings } from '../context/SettingsContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const FitnessCalculator = () => {
+  const { t } = useSettings();
   const [weightStr, setWeightStr] = useState('75');
   const [unit, setUnit] = useState('kg');
   const [selectedTrekId, setSelectedTrekId] = useState(treks[0]?.id || 1);
@@ -111,16 +113,16 @@ const FitnessCalculator = () => {
             </svg>
             
             <h2 className="font-condensed font-extrabold text-4xl sm:text-5xl uppercase text-darkSlate dark:text-creamBg tracking-wide mb-3">
-              TREK CALORIE CALCULATOR
+              {t('fitness.title')}
             </h2>
             <p className="font-sans text-darkSlate/70 dark:text-creamBg/70 text-xs sm:text-sm leading-relaxed mb-6">
-              Enter your details below to estimate total energy expenditure, body fat burn, and training prep requirements.
+              {t('fitness.desc')}
             </p>
 
             {/* Trek Selection */}
             <div className="mb-5">
               <label className="block font-sans text-xs font-bold uppercase tracking-wider text-darkSlate dark:text-creamBg mb-2">
-                Select Your Trek Route
+                {t('fitness.routeLabel')}
               </label>
               <select 
                 value={selectedTrekId}
@@ -138,7 +140,7 @@ const FitnessCalculator = () => {
             {/* Weight Input */}
             <div className="mb-6">
               <label className="block font-sans text-xs font-bold uppercase tracking-wider text-darkSlate dark:text-creamBg mb-2">
-                Body Weight
+                {t('fitness.weightLabel')}
               </label>
               <div className="flex items-center gap-2 sm:gap-3 w-full overflow-hidden">
                 <input 
@@ -172,7 +174,7 @@ const FitnessCalculator = () => {
             }}
             className="w-full bg-slateTeal hover:bg-[#2b4453] text-white font-condensed font-extrabold text-lg uppercase tracking-wider py-3.5 rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 hover:scale-[1.01]"
           >
-            Explore Matching Treks <ArrowRight size={18} />
+            {t('fitness.btn')} <ArrowRight size={18} />
           </button>
         </div>
 
@@ -181,7 +183,7 @@ const FitnessCalculator = () => {
           <div>
             <div className="flex justify-between items-center mb-6">
               <span className="font-sans text-xs font-bold uppercase tracking-widest text-white/70">
-                ESTIMATED ENERGY EXPENDITURE
+                {t('fitness.expenditure')}
               </span>
               <Activity size={20} className="text-neonLime" />
             </div>
@@ -214,33 +216,30 @@ const FitnessCalculator = () => {
                   {totalCalories.toLocaleString()}
                 </p>
                 <p className="font-sans text-xs uppercase tracking-widest text-white/80 font-bold">
-                  TOTAL KILOCALORIES BURNED
+                  {t('fitness.totalKcal')}
                 </p>
               </div>
             </div>
 
-            {/* Equivalent Burn Metrics */}
-            <div className="grid grid-cols-3 gap-3 text-center mb-6">
-              <div className="bg-black/20 p-3.5 rounded-2xl border border-white/10 hover:scale-105 transition-transform">
-                <p className="font-condensed font-extrabold text-2xl text-white">{marathons}</p>
-                <p className="font-sans text-[10px] uppercase font-bold text-white/70 mt-0.5">Marathons</p>
+            {/* Equivalent Metrics */}
+            <div className="grid grid-cols-3 gap-3 mb-6">
+              <div className="bg-black/20 p-3 rounded-xl border border-white/10 text-center">
+                <p className="font-condensed font-extrabold text-2xl text-neonLime">{marathons}</p>
+                <p className="font-sans text-[10px] text-white/70 font-semibold uppercase">{t('fitness.marathons')}</p>
               </div>
-              <div className="bg-black/20 p-3.5 rounded-2xl border border-white/10 hover:scale-105 transition-transform">
-                <p className="font-condensed font-extrabold text-2xl text-white">{bigMacs}</p>
-                <p className="font-sans text-[10px] uppercase font-bold text-white/70 mt-0.5">Burgers</p>
+              <div className="bg-black/20 p-3 rounded-xl border border-white/10 text-center">
+                <p className="font-condensed font-extrabold text-2xl text-neonLime">{bigMacs}</p>
+                <p className="font-sans text-[10px] text-white/70 font-semibold uppercase">{t('fitness.burgers')}</p>
               </div>
-              <div className="bg-black/20 p-3.5 rounded-2xl border border-white/10 hover:scale-105 transition-transform">
-                <p className="font-condensed font-extrabold text-2xl text-white">{fatBurned} <span className="text-xs font-normal">kg</span></p>
-                <p className="font-sans text-[10px] uppercase font-bold text-white/70 mt-0.5">Fat Loss</p>
+              <div className="bg-black/20 p-3 rounded-xl border border-white/10 text-center">
+                <p className="font-condensed font-extrabold text-2xl text-neonLime">{fatBurned} <span className="text-xs">kg</span></p>
+                <p className="font-sans text-[10px] text-white/70 font-semibold uppercase">{t('fitness.fatLoss')}</p>
               </div>
             </div>
           </div>
 
-          <div className="bg-black/20 p-4 rounded-2xl border border-white/10">
-            <p className="font-sans text-xs text-white/80 leading-relaxed flex items-start gap-2">
-              <Dumbbell size={16} className="text-neonLime shrink-0 mt-0.5" />
-              <span>Recommended Prep: 3-4 months of cardiovascular stairs & weighted pack training prior to departure.</span>
-            </p>
+          <div className="bg-black/20 p-4 rounded-xl border border-white/10 text-xs text-white/80 leading-relaxed font-sans">
+            💡 <strong className="text-neonLime">{t('fitness.prep')}</strong>
           </div>
         </div>
 

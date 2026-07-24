@@ -85,11 +85,11 @@ const Destinations = () => {
             </svg>
 
             <h2 className="font-condensed font-extrabold text-4xl sm:text-6xl md:text-7xl uppercase text-darkSlate dark:text-creamBg tracking-wider relative z-10">
-              NEW ARRIVALS & POPULAR TREKS
+              {t('dest.title')}
             </h2>
             <p className="font-sans text-darkSlate/60 dark:text-creamBg/60 text-xs sm:text-sm uppercase tracking-widest font-semibold mt-2 relative z-10 flex items-center justify-center gap-2">
               <TrendingUp size={14} className="text-slateTeal dark:text-neonLime" />
-              CURATED HIMALAYAN EXPEDITIONS & HIGH PASSES
+              {t('dest.desc')}
             </p>
           </div>
 
@@ -167,7 +167,7 @@ const Destinations = () => {
               onClick={() => setViewAll(!viewAll)}
               className="border border-darkSlate/30 dark:border-creamBg/30 hover:bg-darkSlate hover:text-white dark:hover:bg-creamBg dark:hover:text-darkSlate text-darkSlate dark:text-creamBg px-8 py-2.5 rounded-full font-sans text-xs font-bold uppercase tracking-widest transition-all bg-transparent"
             >
-              {viewAll ? 'SHOW LESS' : 'VIEW ALL TREKS'}
+              {viewAll ? t('dest.showLess') : t('dest.viewAll')}
             </button>
           </div>
         </div>

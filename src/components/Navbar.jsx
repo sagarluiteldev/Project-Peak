@@ -6,7 +6,7 @@ import gsap from 'gsap';
 
 const Navbar = ({ onCompassOpen }) => {
   const { theme, toggleTheme } = useTheme();
-  const { currency, setCurrency, language, setLanguage } = useSettings();
+  const { currency, setCurrency, language, setLanguage, t } = useSettings();
   const iconRef = useRef(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -24,19 +24,19 @@ const Navbar = ({ onCompassOpen }) => {
   };
 
   const navLinks = [
-    { href: '#destinations', label: 'Treks' },
-    { href: '#itinerary-planner', label: 'Planner' },
-    { href: '#permit-dashboard', label: 'Permits' },
-    { href: '#gear-checker', label: 'Gear' },
-    { href: '#weather-widget', label: 'Weather' },
-    { href: '#testimonials', label: 'Reviews' },
+    { href: '#destinations', label: t('nav.treks') },
+    { href: '#itinerary-planner', label: t('nav.planner') },
+    { href: '#permit-dashboard', label: t('nav.permits') },
+    { href: '#gear-checker', label: t('nav.gear') },
+    { href: '#weather-widget', label: t('nav.weather') },
+    { href: '#testimonials', label: t('nav.reviews') },
   ];
 
   return (
     <header className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl z-50 bg-creamCanvas/90 dark:bg-darkSlate/90 backdrop-blur-md border border-creamBorder/70 dark:border-white/10 px-6 md:px-8 py-4 md:py-5 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all">
       <div className="flex items-center justify-between w-full">
         
-        {/* Brand Logo */}
+        {/* Brand Logo (Unchanged PROJECT PEAK) */}
         <a href="#" className="font-condensed text-2xl md:text-3xl font-extrabold tracking-wider shrink-0 text-darkSlate dark:text-creamBg uppercase flex items-center gap-2 md:gap-3 group">
           <img
             src="/assets/mountain_logo.png"
@@ -72,7 +72,7 @@ const Navbar = ({ onCompassOpen }) => {
             </button>
             <input
               type="text"
-              placeholder="Search treks..."
+              placeholder={t('nav.searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className={`bg-transparent font-sans text-xs text-darkSlate dark:text-creamBg placeholder:text-darkSlate/40 dark:placeholder:text-creamBg/40 focus:outline-none transition-opacity duration-500 delay-100 ${searchExpanded ? 'opacity-100 w-full pr-3' : 'opacity-0 w-0'}`}
@@ -157,7 +157,7 @@ const Navbar = ({ onCompassOpen }) => {
           ))}
           <button onClick={() => { onCompassOpen(); setMobileOpen(false); }}
                   className="font-sans text-sm font-bold uppercase py-2 border-b border-creamBorder/50 dark:border-white/10 text-left flex items-center gap-2">
-            <CompassIcon size={18} /> Interactive Compass
+            <CompassIcon size={18} /> {t('nav.compass')}
           </button>
           
           <button onClick={() => { handleThemeToggle(); setMobileOpen(false); }}
@@ -193,7 +193,7 @@ const Navbar = ({ onCompassOpen }) => {
             </div>
           </div>
           <a href="#destinations" className="bg-neonLime text-black px-6 py-3 rounded-full font-condensed uppercase tracking-widest text-lg font-extrabold text-center shadow-md transition-all mt-2"
-             onClick={() => setMobileOpen(false)}>EXPLORE TREKS</a>
+             onClick={() => setMobileOpen(false)}>{t('nav.explore')}</a>
         </div>
       )}
     </header>

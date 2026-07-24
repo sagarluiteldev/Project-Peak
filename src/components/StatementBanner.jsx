@@ -2,10 +2,12 @@ import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowUpRight } from 'lucide-react';
+import { useSettings } from '../context/SettingsContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const StatementBanner = () => {
+  const { t } = useSettings();
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
 
@@ -98,20 +100,14 @@ const StatementBanner = () => {
           
           <h2 ref={titleRef} className="font-condensed text-[1.8rem] xs:text-[2.6rem] sm:text-[3.8rem] md:text-[5.2rem] lg:text-[6.5rem] xl:text-[7.2rem] font-extrabold tracking-tight uppercase text-darkSlate dark:text-creamBg leading-none flex flex-nowrap whitespace-nowrap gap-x-1.5 sm:gap-x-3 items-center shrink-0">
             <span className="inline-flex overflow-hidden py-1">
-              <span className="mask-word inline-block gpu-layer">THE</span>
+              <span className="mask-word inline-block gpu-layer">{t('statement.himalayas')}</span>
             </span>
             <span className="inline-flex overflow-hidden py-1">
-              <span className="mask-word inline-block gpu-layer">HIMALAYAS</span>
-            </span>
-            <span className="inline-flex overflow-hidden py-1">
-              <span className="mask-word inline-block gpu-layer">ARE</span>
-            </span>
-            <span className="inline-flex overflow-hidden py-1">
-              <span className="mask-word inline-block gpu-layer">OUR</span>
+              <span className="mask-word inline-block gpu-layer">{t('statement.areOur')}</span>
             </span>
             <span className="inline-flex overflow-hidden py-1">
               <span className="mask-word bg-neonLime text-black px-2 sm:px-3.5 py-0.5 rounded-lg font-extrabold shadow-sm gpu-layer">
-                TRUE HOME
+                {t('statement.trueHome')}
               </span>
             </span>
           </h2>
@@ -122,7 +118,7 @@ const StatementBanner = () => {
               onClick={scrollToTreks}
               className="bg-neonLime hover:bg-[#b8e600] text-black font-condensed font-extrabold text-lg md:text-xl uppercase tracking-widest px-8 py-3.5 rounded-full shadow-[0_8px_30px_rgba(204,255,0,0.3)] hover:shadow-[0_12px_40px_rgba(204,255,0,0.5)] hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-3 cursor-pointer gpu-layer"
             >
-              <span>BEGIN EXPEDITION</span>
+              <span>{t('statement.cta')}</span>
               <ArrowUpRight size={20} className="stroke-[2.5]" />
             </button>
           </div>

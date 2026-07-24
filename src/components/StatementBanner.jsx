@@ -8,16 +8,8 @@ gsap.registerPlugin(ScrollTrigger);
 const StatementBanner = () => {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
-  const btnRef = useRef(null);
-  const xTo = useRef(null);
-  const yTo = useRef(null);
 
   useEffect(() => {
-    if (btnRef.current) {
-      xTo.current = gsap.quickTo(btnRef.current, 'x', { duration: 0.35, ease: 'power2.out' });
-      yTo.current = gsap.quickTo(btnRef.current, 'y', { duration: 0.35, ease: 'power2.out' });
-    }
-
     let ctx = gsap.context(() => {
       // 1. Kinetic Word Mask Reveal - Longer animation, starts slow
       if (titleRef.current) {
@@ -66,22 +58,6 @@ const StatementBanner = () => {
 
     return () => ctx.revert();
   }, []);
-
-  // Magnetic Button Tracking with gsap.quickTo for 120 FPS response
-  const handleMouseMove = (e) => {
-    if (!btnRef.current || !xTo.current || !yTo.current) return;
-    const rect = btnRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left - rect.width / 2) * 0.35;
-    const y = (e.clientY - rect.top - rect.height / 2) * 0.35;
-    xTo.current(x);
-    yTo.current(y);
-  };
-
-  const handleMouseLeave = () => {
-    if (!xTo.current || !yTo.current) return;
-    xTo.current(0);
-    yTo.current(0);
-  };
 
   const scrollToTreks = () => {
     const el = document.getElementById('destinations');
@@ -140,16 +116,11 @@ const StatementBanner = () => {
             </span>
           </h2>
 
-          {/* Magnetic Liquid CTA Button */}
-          <div
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            className="shrink-0 pt-2"
-          >
+          {/* Subtle Hover-Pop CTA Button */}
+          <div className="shrink-0 pt-2">
             <button
-              ref={btnRef}
               onClick={scrollToTreks}
-              className="bg-neonLime hover:bg-[#b8e600] text-black font-condensed font-extrabold text-lg md:text-xl uppercase tracking-widest px-8 py-3.5 rounded-full shadow-[0_10px_35px_rgba(204,255,0,0.35)] hover:scale-105 transition-all flex items-center gap-3 cursor-pointer gpu-layer"
+              className="bg-neonLime hover:bg-[#b8e600] text-black font-condensed font-extrabold text-lg md:text-xl uppercase tracking-widest px-8 py-3.5 rounded-full shadow-[0_8px_30px_rgba(204,255,0,0.3)] hover:shadow-[0_12px_40px_rgba(204,255,0,0.5)] hover:scale-105 active:scale-95 transition-all duration-300 flex items-center gap-3 cursor-pointer gpu-layer"
             >
               <span>BEGIN EXPEDITION</span>
               <ArrowUpRight size={20} className="stroke-[2.5]" />

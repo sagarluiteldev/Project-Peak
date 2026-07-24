@@ -29,6 +29,8 @@ const FitnessCalculator = () => {
           scrollTrigger: {
             trigger: sectionRef.current,
             start: 'top 80%',
+            preventOverlaps: true,
+            fastScrollEnd: true
           }
         }
       );
@@ -45,6 +47,8 @@ const FitnessCalculator = () => {
             scrollTrigger: {
               trigger: sectionRef.current,
               start: 'top 75%',
+              preventOverlaps: true,
+              fastScrollEnd: true
             }
           }
         );

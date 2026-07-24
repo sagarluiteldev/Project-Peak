@@ -23,7 +23,9 @@ const LogisticsCards = () => {
           ease: 'power3.out',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 80%'
+            start: 'top 80%',
+            preventOverlaps: true,
+            fastScrollEnd: true
           }
         }
       );
@@ -41,7 +43,9 @@ const LogisticsCards = () => {
             ease: 'power2.out',
             scrollTrigger: {
               trigger: sectionRef.current,
-              start: 'top 75%'
+              start: 'top 75%',
+              preventOverlaps: true,
+              fastScrollEnd: true
             }
           }
         );

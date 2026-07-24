@@ -31,7 +31,12 @@ const Destinations = () => {
             duration: 1.4,
             stagger: 0.2,
             ease: 'power2.out',
-            scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' }
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top 80%',
+              preventOverlaps: true,
+              fastScrollEnd: true
+            }
           }
         );
       }
@@ -47,7 +52,12 @@ const Destinations = () => {
           duration: 0.8,
           stagger: 0.12,
           ease: 'power3.out',
-          scrollTrigger: { trigger: sectionRef.current, start: 'top 75%' }
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top 75%',
+            preventOverlaps: true,
+            fastScrollEnd: true
+          }
         }
       );
     }, sectionRef);

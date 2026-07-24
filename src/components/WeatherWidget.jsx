@@ -50,6 +50,8 @@ const WeatherWidget = () => {
           scrollTrigger: {
             trigger: sectionRef.current,
             start: 'top 80%',
+            preventOverlaps: true,
+            fastScrollEnd: true
           }
         }
       );

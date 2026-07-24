@@ -52,3 +52,18 @@
 .clip-reveal {
   clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0% 100%);
 }
+
+/* GPU Hardware Acceleration & Anti-Flicker Utilities */
+.gpu-layer {
+  will-change: transform, opacity;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+}
+
+.gpu-card {
+  will-change: transform, opacity, box-shadow;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+

@@ -86,7 +86,9 @@ const Testimonials = () => {
           duration: 0.8,
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 80%'
+            start: 'top 80%',
+            preventOverlaps: true,
+            fastScrollEnd: true
           }
         }
       );
@@ -106,15 +108,17 @@ const Testimonials = () => {
         ease: 'none'
       });
 
-      // 3. Scroll Velocity Acceleration
+      // 3. Scroll Velocity Acceleration (smoothed with lerped tween)
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: 'top bottom',
         end: 'bottom top',
+        preventOverlaps: true,
+        fastScrollEnd: true,
         onUpdate: (self) => {
           const velocity = Math.abs(self.getVelocity());
-          const boost = Math.min(3.5, 1 + velocity / 1200);
-          gsap.to([tl1, tl2], { timeScale: boost, duration: 0.3, overwrite: 'auto' });
+          const boost = Math.min(3.0, 1 + velocity / 1500);
+          gsap.to([tl1, tl2], { timeScale: boost, duration: 0.5, ease: 'power1.out', overwrite: 'auto' });
         }
       });
     }, sectionRef);

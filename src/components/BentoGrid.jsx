@@ -81,6 +81,8 @@ const BentoGrid = () => {
           scrollTrigger: {
             trigger: sectionRef.current,
             start: 'top 80%',
+            preventOverlaps: true,
+            fastScrollEnd: true
           }
         }
       );
@@ -99,6 +101,8 @@ const BentoGrid = () => {
               start: 'top bottom',
               end: 'bottom top',
               scrub: 1.2,
+              preventOverlaps: true,
+              fastScrollEnd: true
             }
           }
         );

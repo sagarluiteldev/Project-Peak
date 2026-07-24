@@ -21,6 +21,10 @@ import OfflineDashboard from './components/OfflineDashboard';
 import Preloader from './components/Preloader';
 
 gsap.registerPlugin(ScrollTrigger);
+ScrollTrigger.config({
+  ignoreMobileResize: true,
+  autoRefreshEvents: 'visibilitychange,DOMContentLoaded,load'
+});
 
 const useOnlineStatus = () => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
@@ -131,7 +135,14 @@ function App() {
     });
     gsap.ticker.lagSmoothing(0);
 
+    const refreshScrollTrigger = () => {
+      ScrollTrigger.refresh();
+    };
+
+    window.addEventListener('load', refreshScrollTrigger);
+
     return () => {
+      window.removeEventListener('load', refreshScrollTrigger);
       lenis.destroy();
     };
   }, []);

@@ -35,7 +35,7 @@ const OptionButton = ({ selected, onClick, children }) => (
 );
 
 const ItineraryPlanner = () => {
-  const { convertPrice } = useSettings();
+  const { convertPrice, t } = useSettings();
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState({
     difficulty: '', duration: '', interests: [],
@@ -162,10 +162,10 @@ const ItineraryPlanner = () => {
       <div className="max-w-[1600px] mx-auto">
         <div className="text-center mb-8">
           <span className="bg-neonLime text-black px-3.5 py-1 rounded-full text-xs font-extrabold uppercase tracking-widest inline-block mb-2 shadow-sm">
-            CUSTOM ROUTE BUILDER
+            {t('planner.badge')}
           </span>
           <h2 className="font-condensed font-extrabold text-4xl sm:text-5xl uppercase text-darkSlate dark:text-creamBg tracking-wide">
-            DESIGN YOUR HIMALAYAN ITINERARY
+            {t('planner.title')}
           </h2>
         </div>
 

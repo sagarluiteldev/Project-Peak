@@ -61,11 +61,9 @@ const Hero = ({ ready = true }) => {
       }, 0.15);
 
       // --- 2. Scroll-Triggered Parallax ---
-      // Move frames at completely different speeds on scroll
-      frames.forEach((frame, i) => {
-        // Some move up, some move down faster
-        const yMove = i % 2 === 0 ? gsap.utils.random(-150, -80) : gsap.utils.random(80, 150);
-        
+      const desktopFrames = heroRef.current.querySelectorAll('.mini-frame');
+      desktopFrames.forEach((frame, i) => {
+        const yMove = i % 2 === 0 ? -120 : 120;
         gsap.to(frame, {
           y: yMove,
           ease: 'none',
@@ -73,12 +71,42 @@ const Hero = ({ ready = true }) => {
             trigger: heroRef.current,
             start: 'top top',
             end: 'bottom top',
-            scrub: 1.5, // Smooth scrubbing
+            scrub: 1.5,
           }
         });
       });
 
-      // Subtle parallax for the main title text (fades as user scrolls down)
+      // Mobile top frame
+      const mobileTopFrame = heroRef.current.querySelector('.mobile-frame-top');
+      if (mobileTopFrame) {
+        gsap.to(mobileTopFrame, {
+          y: 50,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1.5,
+          }
+        });
+      }
+
+      // Mobile bottom frames (left & right) animate together with exact same animation
+      const mobileBottomFrames = heroRef.current.querySelectorAll('.mobile-frame-bottom');
+      if (mobileBottomFrames.length > 0) {
+        gsap.to(mobileBottomFrames, {
+          y: -60,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1.5,
+          }
+        });
+      }
+
+      // Subtle parallax for the main title text
       gsap.to(titleRef.current, {
         y: 80,
         scale: 0.95,
@@ -86,7 +114,7 @@ const Hero = ({ ready = true }) => {
         ease: 'none',
         scrollTrigger: {
           trigger: heroRef.current,
-          start: 'top top', // Start at top of viewport so title is 100% opaque at scroll position 0
+          start: 'top top',
           end: 'bottom top',
           scrub: 1,
         }
@@ -151,15 +179,15 @@ const Hero = ({ ready = true }) => {
         </span>
       </h1>
 
-      {/* Mobile-Only Bento Stack - Wider & Larger for Mobile Hero */}
+      {/* Mobile-Only Bento Stack - Bottom left & bottom right frames synced */}
       <div className="md:hidden grid grid-cols-2 gap-3 sm:gap-4 mt-8 w-full max-w-full px-1 sm:px-0 mx-auto z-20">
-        <div className="mobile-frame col-span-2 aspect-[2.1/1] rounded-2xl overflow-hidden shadow-xl border-2 border-white/80 dark:border-darkSlate/80">
+        <div className="mobile-frame mobile-frame-top col-span-2 aspect-[2.1/1] rounded-2xl overflow-hidden shadow-xl border-2 border-white/80 dark:border-darkSlate/80">
           <img src={miniImages[0]} alt="Trek Mobile 1" className="w-full h-full object-cover" />
         </div>
-        <div className="mobile-frame aspect-square rounded-2xl overflow-hidden shadow-md border-2 border-white/80 dark:border-darkSlate/80">
+        <div className="mobile-frame mobile-frame-bottom aspect-square rounded-2xl overflow-hidden shadow-md border-2 border-white/80 dark:border-darkSlate/80">
           <img src={miniImages[1]} alt="Trek Mobile 2" className="w-full h-full object-cover" />
         </div>
-        <div className="mobile-frame aspect-square rounded-2xl overflow-hidden shadow-md border-2 border-white/80 dark:border-darkSlate/80">
+        <div className="mobile-frame mobile-frame-bottom aspect-square rounded-2xl overflow-hidden shadow-md border-2 border-white/80 dark:border-darkSlate/80">
           <img src={miniImages[2]} alt="Trek Mobile 3" className="w-full h-full object-cover" />
         </div>
       </div>
@@ -167,7 +195,7 @@ const Hero = ({ ready = true }) => {
       {/* Nature Statement Tagline & Electric Neon Lime Pill Button */}
       <div className="max-w-3xl mx-auto mt-12 md:mt-48 flex flex-col items-center text-center relative z-20">
         <p className="hero-tagline text-darkSlate/80 dark:text-creamBg/80 font-sans text-sm sm:text-base md:text-lg leading-relaxed mb-8 font-semibold">
-          We believe that nature is our true home. We strive to make your Himalayan outdoor experience closer to nature, more comfortable, and unforgettable.
+          {t('hero.natureDesc')}
         </p>
 
         {/* Electric Neon Lime Pill Button */}

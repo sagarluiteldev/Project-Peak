@@ -55,8 +55,8 @@ const FeaturesBox = () => {
           {/* Large Item */}
           <div className="bento-item md:col-span-2 md:row-span-2 bg-white dark:bg-darkSlate/80 border border-creamBorder/80 dark:border-white/10 rounded-3xl p-6 sm:p-8 md:p-10 flex flex-col justify-between group overflow-hidden relative shadow-sm hover:shadow-xl transition-all duration-300 group-hover/grid:opacity-60 hover:!opacity-100 hover:scale-[1.01]">
             <div className="relative z-10">
-              <div className="w-14 h-14 rounded-2xl bg-neonLime/30 dark:bg-neonLime/20 flex items-center justify-center mb-6 group-hover:animate-bounce">
-                <Plane size={28} className="text-darkSlate dark:text-neonLime transition-transform duration-300 group-hover:scale-110" />
+              <div className="w-14 h-14 rounded-2xl bg-slateTeal flex items-center justify-center mb-6 shadow-md transition-transform duration-300 group-hover:scale-110">
+                <Plane size={28} className="text-white" />
               </div>
               <h3 className="font-condensed font-extrabold text-3xl md:text-4xl uppercase mb-3 text-darkSlate dark:text-creamBg">
                 {t('feat.flights')}
@@ -69,8 +69,8 @@ const FeaturesBox = () => {
 
           {/* Medium Item */}
           <div className="bento-item md:col-span-2 bg-white dark:bg-darkSlate/80 border border-creamBorder/80 dark:border-white/10 rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition-all duration-300 group-hover/grid:opacity-60 hover:!opacity-100 hover:scale-[1.01] group">
-            <div className="w-12 h-12 rounded-xl bg-neonLime/30 dark:bg-neonLime/20 flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110">
-              <Wallet size={22} className="text-darkSlate dark:text-neonLime" />
+            <div className="w-12 h-12 rounded-xl bg-slateTeal flex items-center justify-center mb-4 shadow-md transition-transform duration-300 group-hover:scale-110">
+              <Wallet size={22} className="text-white" />
             </div>
             <h3 className="font-condensed font-extrabold text-2xl uppercase mb-2 text-darkSlate dark:text-creamBg">{t('feat.payments')}</h3>
             <p className="font-sans text-darkSlate/70 dark:text-creamBg/70 text-xs leading-relaxed">
@@ -80,8 +80,8 @@ const FeaturesBox = () => {
 
           {/* Small Item 1 */}
           <div className="bento-item md:col-span-1 bg-white dark:bg-darkSlate/80 border border-creamBorder/80 dark:border-white/10 rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition-all duration-300 group-hover/grid:opacity-60 hover:!opacity-100 hover:scale-[1.01] group">
-            <div className="w-12 h-12 rounded-xl bg-neonLime/30 dark:bg-neonLime/20 flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110">
-              <Shield size={22} className="text-darkSlate dark:text-neonLime" />
+            <div className="w-12 h-12 rounded-xl bg-slateTeal flex items-center justify-center mb-4 shadow-md transition-transform duration-300 group-hover:scale-110">
+              <Shield size={22} className="text-white" />
             </div>
             <h3 className="font-condensed font-extrabold text-xl uppercase mb-2 text-darkSlate dark:text-creamBg">{t('feat.permits')}</h3>
             <p className="font-sans text-darkSlate/70 dark:text-creamBg/70 text-xs leading-relaxed">
@@ -91,8 +91,8 @@ const FeaturesBox = () => {
 
           {/* Small Item 2 */}
           <div className="bento-item md:col-span-1 bg-white dark:bg-darkSlate/80 border border-creamBorder/80 dark:border-white/10 rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl transition-all duration-300 group-hover/grid:opacity-60 hover:!opacity-100 hover:scale-[1.01] group">
-            <div className="w-12 h-12 rounded-xl bg-neonLime/30 dark:bg-neonLime/20 flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110">
-              <Compass size={22} className="text-darkSlate dark:text-neonLime" />
+            <div className="w-12 h-12 rounded-xl bg-slateTeal flex items-center justify-center mb-4 shadow-md transition-transform duration-300 group-hover:scale-110">
+              <Compass size={22} className="text-white" />
             </div>
             <h3 className="font-condensed font-extrabold text-xl uppercase mb-2 text-darkSlate dark:text-creamBg">{t('feat.weather')}</h3>
             <p className="font-sans text-darkSlate/70 dark:text-creamBg/70 text-xs leading-relaxed">

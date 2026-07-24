@@ -41,22 +41,19 @@ const Destinations = () => {
         );
       }
 
-      // 2. Staggered card entrance with topographic layer split ease
+      // 2. Staggered card entrance with fluid power2.out ease
       gsap.fromTo(
         '.trek-card-arrival',
-        { opacity: 0, y: 35, scale: 0.95 },
+        { opacity: 0, y: 20 },
         {
           opacity: 1,
           y: 0,
-          scale: 1,
-          duration: 0.8,
-          stagger: 0.12,
-          ease: 'power3.out',
+          duration: 0.65,
+          stagger: 0.05,
+          ease: 'power2.out',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 75%',
-            preventOverlaps: true,
-            fastScrollEnd: true
+            start: 'top 92%'
           }
         }
       );

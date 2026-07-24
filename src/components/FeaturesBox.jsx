@@ -14,22 +14,18 @@ const FeaturesBox = () => {
     let ctx = gsap.context(() => {
       const items = containerRef.current.querySelectorAll('.bento-item');
       items.forEach((item, index) => {
-        const flyDirection = index % 2 === 0 ? -50 : 50;
         gsap.fromTo(
           item,
-          { x: flyDirection, opacity: 0, scale: 0.9 },
+          { y: 20, opacity: 0 },
           {
-            x: 0,
+            y: 0,
             opacity: 1,
-            scale: 1,
-            duration: 0.9,
-            delay: index * 0.1,
-            ease: 'back.out(1.3)',
+            duration: 0.65,
+            delay: index * 0.05,
+            ease: 'power2.out',
             scrollTrigger: {
               trigger: containerRef.current,
-              start: 'top 80%',
-              preventOverlaps: true,
-              fastScrollEnd: true
+              start: 'top 92%'
             }
           }
         );

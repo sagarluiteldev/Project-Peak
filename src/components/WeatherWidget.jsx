@@ -40,18 +40,15 @@ const WeatherWidget = () => {
     let ctx = gsap.context(() => {
       gsap.fromTo(
         cardRef.current,
-        { opacity: 0, y: 35, scale: 0.96 },
+        { opacity: 0, y: 20 },
         {
           opacity: 1,
           y: 0,
-          scale: 1,
-          duration: 0.85,
-          ease: 'power3.out',
+          duration: 0.65,
+          ease: 'power2.out',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 80%',
-            preventOverlaps: true,
-            fastScrollEnd: true
+            start: 'top 92%'
           }
         }
       );

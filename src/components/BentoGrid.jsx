@@ -67,22 +67,19 @@ const BentoGrid = () => {
 
   useEffect(() => {
     let ctx = gsap.context(() => {
-      // 1. Entrance animation for bento cards
+      // 1. Smooth Fluid entrance animation for bento cards
       gsap.fromTo(
         '.bento-card',
-        { opacity: 0, scale: 0.92, y: 35 },
+        { opacity: 0, y: 20 },
         {
           opacity: 1,
-          scale: 1,
           y: 0,
-          duration: 0.9,
-          stagger: 0.08,
-          ease: 'power3.out',
+          duration: 0.65,
+          stagger: 0.05,
+          ease: 'power2.out',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 80%',
-            preventOverlaps: true,
-            fastScrollEnd: true
+            start: 'top 92%',
           }
         }
       );

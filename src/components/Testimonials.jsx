@@ -79,46 +79,53 @@ const Testimonials = () => {
       // 1. Entrance Fade
       gsap.fromTo(
         sectionRef.current.querySelector('.header-title'),
-        { opacity: 0, y: 30 },
+        { opacity: 0, y: 20 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.8,
+          duration: 0.65,
+          ease: 'power2.out',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 80%',
-            preventOverlaps: true,
-            fastScrollEnd: true
+            start: 'top 90%'
           }
         }
       );
 
-      // 2. Continuous Marquee Animations
-      const tl1 = gsap.to(marquee1Ref.current, {
-        xPercent: -50,
-        repeat: -1,
-        duration: 28,
-        ease: 'none'
-      });
+      // 2. Seamless Continuous Marquee Animations
+      // Row 1: Smooth Leftward Loop (0% -> -50%)
+      const tl1 = gsap.fromTo(
+        marquee1Ref.current,
+        { xPercent: 0 },
+        {
+          xPercent: -50,
+          repeat: -1,
+          duration: 30,
+          ease: 'none'
+        }
+      );
 
-      const tl2 = gsap.to(marquee2Ref.current, {
-        xPercent: 50,
-        repeat: -1,
-        duration: 28,
-        ease: 'none'
-      });
+      // Row 2: Smooth Rightward Loop (-50% -> 0%) - Mathematically Seamless!
+      const tl2 = gsap.fromTo(
+        marquee2Ref.current,
+        { xPercent: -50 },
+        {
+          xPercent: 0,
+          repeat: -1,
+          duration: 30,
+          ease: 'none'
+        }
+      );
 
       // 3. Scroll Velocity Acceleration (smoothed with lerped tween)
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: 'top bottom',
         end: 'bottom top',
-        preventOverlaps: true,
-        fastScrollEnd: true,
         onUpdate: (self) => {
           const velocity = Math.abs(self.getVelocity());
-          const boost = Math.min(3.0, 1 + velocity / 1500);
-          gsap.to([tl1, tl2], { timeScale: boost, duration: 0.5, ease: 'power1.out', overwrite: 'auto' });
+          const boost = Math.min(2.5, 1 + velocity / 2000);
+          gsap.to([tl1, tl2], { timeScale: boost, duration: 0.6, ease: 'power1.out', overwrite: 'auto' });
         }
       });
     }, sectionRef);
@@ -147,11 +154,11 @@ const Testimonials = () => {
         <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-creamCanvas dark:from-[#121c27] to-transparent z-20 pointer-events-none" />
 
         {/* Row 1: Leftward Marquee */}
-        <div className="flex w-max" ref={marquee1Ref}>
+        <div className="flex w-max gpu-layer" ref={marquee1Ref}>
           {[...testimonialsRow1, ...testimonialsRow1].map((item, i) => (
             <div
               key={i}
-              className="w-[320px] sm:w-[380px] md:w-[420px] shrink-0 mx-2.5 bg-white dark:bg-darkSlate/80 border border-creamBorder/80 dark:border-white/10 rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-sm hover:shadow-2xl transition-all duration-300 group hover:-translate-y-2 cursor-pointer"
+              className="w-[320px] sm:w-[380px] md:w-[420px] shrink-0 mx-2.5 bg-white dark:bg-darkSlate/80 border border-creamBorder/80 dark:border-white/10 rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-sm hover:shadow-xl transition-all duration-300 group hover:-translate-y-1.5 cursor-pointer gpu-card"
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
@@ -182,12 +189,12 @@ const Testimonials = () => {
           ))}
         </div>
 
-        {/* Row 2: Rightward Marquee */}
-        <div className="flex w-max -ml-[50%]" ref={marquee2Ref}>
+        {/* Row 2: Seamless Rightward Marquee */}
+        <div className="flex w-max gpu-layer" ref={marquee2Ref}>
           {[...testimonialsRow2, ...testimonialsRow2].map((item, i) => (
             <div
               key={i}
-              className="w-[320px] sm:w-[380px] md:w-[420px] shrink-0 mx-2.5 bg-white dark:bg-darkSlate/80 border border-creamBorder/80 dark:border-white/10 rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-sm hover:shadow-2xl transition-all duration-300 group hover:-translate-y-2 cursor-pointer"
+              className="w-[320px] sm:w-[380px] md:w-[420px] shrink-0 mx-2.5 bg-white dark:bg-darkSlate/80 border border-creamBorder/80 dark:border-white/10 rounded-3xl p-6 sm:p-8 flex flex-col justify-between shadow-sm hover:shadow-xl transition-all duration-300 group hover:-translate-y-1.5 cursor-pointer gpu-card"
             >
               <div>
                 <div className="flex items-center justify-between mb-4">

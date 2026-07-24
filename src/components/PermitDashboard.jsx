@@ -12,20 +12,19 @@ const PermitDashboard = () => {
 
   useEffect(() => {
     let ctx = gsap.context(() => {
-      // 1. Entrance animation for dashboard panels
+      // 1. Entrance Stagger
       gsap.fromTo(
         '.permit-panel',
-        { opacity: 0, y: 35, scale: 0.96 },
+        { opacity: 0, y: 20 },
         {
           opacity: 1,
           y: 0,
-          scale: 1,
-          duration: 0.85,
-          stagger: 0.15,
-          ease: 'power3.out',
+          duration: 0.65,
+          stagger: 0.06,
+          ease: 'power2.out',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 80%',
+            start: 'top 92%',
           }
         }
       );

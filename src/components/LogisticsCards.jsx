@@ -10,22 +10,19 @@ const LogisticsCards = () => {
 
   useEffect(() => {
     let ctx = gsap.context(() => {
-      // 1. Staggered Entrance Animation
+      // 1. Fluid Entrance Stagger
       gsap.fromTo(
         '.logistics-card',
-        { opacity: 0, y: 35, scale: 0.96 },
+        { opacity: 0, y: 20 },
         {
           opacity: 1,
           y: 0,
-          scale: 1,
-          duration: 0.85,
-          stagger: 0.15,
-          ease: 'power3.out',
+          duration: 0.65,
+          stagger: 0.05,
+          ease: 'power2.out',
           scrollTrigger: {
             trigger: sectionRef.current,
-            start: 'top 80%',
-            preventOverlaps: true,
-            fastScrollEnd: true
+            start: 'top 92%'
           }
         }
       );

@@ -61,62 +61,70 @@ const Hero = ({ ready = true }) => {
       }, 0.15);
 
       // --- 2. Scroll-Triggered Parallax ---
-      const desktopFrames = heroRef.current.querySelectorAll('.mini-frame');
-      desktopFrames.forEach((frame, i) => {
-        const yMove = i % 2 === 0 ? -120 : 120;
-        gsap.to(frame, {
-          y: yMove,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: heroRef.current,
-            start: 'top top',
-            end: 'bottom top',
-            scrub: 1.5,
-          }
-        });
+      const mm = gsap.matchMedia();
+
+      // Mobile View: h1 title and all 3 mobile images (big image + 2 bottom images) move UP on scroll down
+      mm.add("(max-width: 767px)", () => {
+        const mobileFrames = heroRef.current.querySelectorAll('.mobile-frame');
+        if (mobileFrames.length > 0) {
+          gsap.to(mobileFrames, {
+            y: -60,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: heroRef.current,
+              start: 'top top',
+              end: 'bottom top',
+              scrub: 1.5,
+            }
+          });
+        }
+
+        if (titleRef.current) {
+          gsap.to(titleRef.current, {
+            y: -60,
+            scale: 0.95,
+            opacity: 0.5,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: heroRef.current,
+              start: 'top top',
+              end: 'bottom top',
+              scrub: 1,
+            }
+          });
+        }
       });
 
-      // Mobile top frame
-      const mobileTopFrame = heroRef.current.querySelector('.mobile-frame-top');
-      if (mobileTopFrame) {
-        gsap.to(mobileTopFrame, {
-          y: 50,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: heroRef.current,
-            start: 'top top',
-            end: 'bottom top',
-            scrub: 1.5,
-          }
+      // Desktop View: alternating parallax for mini-frames and downward title parallax
+      mm.add("(min-width: 768px)", () => {
+        const desktopFrames = heroRef.current.querySelectorAll('.mini-frame');
+        desktopFrames.forEach((frame, i) => {
+          const yMove = i % 2 === 0 ? -120 : 120;
+          gsap.to(frame, {
+            y: yMove,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: heroRef.current,
+              start: 'top top',
+              end: 'bottom top',
+              scrub: 1.5,
+            }
+          });
         });
-      }
 
-      // Mobile bottom frames (left & right) animate together with exact same animation
-      const mobileBottomFrames = heroRef.current.querySelectorAll('.mobile-frame-bottom');
-      if (mobileBottomFrames.length > 0) {
-        gsap.to(mobileBottomFrames, {
-          y: -60,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: heroRef.current,
-            start: 'top top',
-            end: 'bottom top',
-            scrub: 1.5,
-          }
-        });
-      }
-
-      // Subtle parallax for the main title text
-      gsap.to(titleRef.current, {
-        y: 80,
-        scale: 0.95,
-        opacity: 0.5,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: heroRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1,
+        if (titleRef.current) {
+          gsap.to(titleRef.current, {
+            y: 80,
+            scale: 0.95,
+            opacity: 0.5,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: heroRef.current,
+              start: 'top top',
+              end: 'bottom top',
+              scrub: 1,
+            }
+          });
         }
       });
       
